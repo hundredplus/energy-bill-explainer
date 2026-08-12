@@ -1,0 +1,9 @@
+README.md
+pyproject.toml
+src/energy_bill_explainer/__init__.py
+src/energy_bill_explainer/calculator.py
+src/energy_bill_explainer.egg-info/PKG-INFO
+src/energy_bill_explainer.egg-info/SOURCES.txt
+src/energy_bill_explainer.egg-info/dependency_links.txt
+src/energy_bill_explainer.egg-info/top_level.txt
+tests/test_calculator.py
