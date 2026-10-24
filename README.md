@@ -16,8 +16,8 @@ The calculation engine is kept separate from Django so the core logic can be reu
 The endpoint accepts a JSON `POST` at `/api/bills/analyse/`.
 
 ```bash
-curl -X POST http://127.0.0.1:8000/api/bills/analyse/ \\
-  -H "Content-Type: application/json" \\
+curl -X POST http://127.0.0.1:8000/api/bills/analyse/ \
+  -H "Content-Type: application/json" \
   -d '{
     "period_start": "2025-01-01",
     "period_end": "2025-01-30",
