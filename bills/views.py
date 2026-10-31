@@ -1,3 +1,5 @@
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -8,6 +10,19 @@ from energy_bill_explainer.calculator import (
 )
 
 from .serializers import BillAnalysisSerializer
+from .services import summarize_usage
+
+
+@require_GET
+def usage_summary(request):
+    """Summarize repeated usage_kwh query parameters from the iMac version."""
+    try:
+        readings = [float(value) for value in request.GET.getlist("usage_kwh")]
+        summary = summarize_usage(readings)
+    except ValueError as error:
+        return JsonResponse({"error": str(error)}, status=400)
+    return JsonResponse(summary)
+
 
 class BillAnalysisView(APIView):
     def post(self, request):
@@ -31,4 +46,6 @@ class BillAnalysisView(APIView):
             },
             status=status.HTTP_200_OK,
         )
+
+
 # Create your views here.

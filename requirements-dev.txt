@@ -1,4 +1,1 @@
-pytest
-pytest-django
-Django
-djangorestframework
+-e .[dev]

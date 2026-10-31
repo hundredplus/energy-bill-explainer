@@ -53,9 +53,7 @@ def test_one_day_billing_period() -> None:
 
 
 def test_zero_usage_is_allowed() -> None:
-    bill = make_bill(
-        total_kwh=Decimal("0")
-    )
+    bill = make_bill(total_kwh=Decimal("0"))
 
     result = calculate_bill(bill)
 
@@ -64,9 +62,7 @@ def test_zero_usage_is_allowed() -> None:
 
 
 def test_zero_supply_charge_is_allowed() -> None:
-    bill = make_bill(
-        daily_supply_charge=Decimal("0")
-    )
+    bill = make_bill(daily_supply_charge=Decimal("0"))
 
     result = calculate_bill(bill)
 
@@ -74,9 +70,7 @@ def test_zero_supply_charge_is_allowed() -> None:
 
 
 def test_zero_usage_rate_is_allowed() -> None:
-    bill = make_bill(
-        usage_rate_per_kwh=Decimal("0")
-    )
+    bill = make_bill(usage_rate_per_kwh=Decimal("0"))
 
     result = calculate_bill(bill)
 
@@ -97,9 +91,7 @@ def test_rejects_end_date_before_start_date() -> None:
 
 
 def test_rejects_negative_usage() -> None:
-    bill = make_bill(
-        total_kwh=Decimal("-1")
-    )
+    bill = make_bill(total_kwh=Decimal("-1"))
 
     with pytest.raises(
         BillValidationError,
@@ -109,9 +101,7 @@ def test_rejects_negative_usage() -> None:
 
 
 def test_rejects_negative_supply_charge() -> None:
-    bill = make_bill(
-        daily_supply_charge=Decimal("-0.01")
-    )
+    bill = make_bill(daily_supply_charge=Decimal("-0.01"))
 
     with pytest.raises(
         BillValidationError,
@@ -121,9 +111,7 @@ def test_rejects_negative_supply_charge() -> None:
 
 
 def test_rejects_negative_usage_rate() -> None:
-    bill = make_bill(
-        usage_rate_per_kwh=Decimal("-0.01")
-    )
+    bill = make_bill(usage_rate_per_kwh=Decimal("-0.01"))
 
     with pytest.raises(
         BillValidationError,
@@ -153,6 +141,7 @@ def test_irregular_billing_period() -> None:
 
     assert result.billing_days == 25
     assert result.daily_usage_kwh == Decimal("10")
+
 
 def test_billing_period_can_span_leap_day() -> None:
     bill = make_bill(
