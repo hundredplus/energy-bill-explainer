@@ -1,11 +1,15 @@
 .venv/
 __pycache__/
 *.py[cod]
+*.egg-info/
 .pytest_cache/
+.ruff_cache/
 .coverage
 htmlcov/
+db.sqlite3
 .env
 .DS_Store
 .vscode/
 .idea/
-docs/
+build/
+dist/
