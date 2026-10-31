@@ -1,73 +1,71 @@
 # Energy Bill Explainer
 
-A small Django REST API backed by a standalone Python calculation engine. It turns a manually entered Victorian electricity bill into a transparent, simplified annual cost estimate.
+Energy Bill Explainer is a Django web application and API that helps Victorian households understand a single-rate electricity bill, estimate annual usage and cost, and prepare accurate inputs for official comparison services.
 
-**Project:** [GitHub repository](https://github.com/hundredplus/energy-bill-explainer)  
-**Portfolio:** [erictran.dev](https://erictran.dev/#work)
+The application is a companion to Victorian Energy Compare and Energy Made Easy. It is not an official comparison service, does not guarantee the cheapest plan, and does not provide financial advice.
 
-## What it does
+## Day 1 status
 
-Submit the bill period, total usage, daily supply charge, and usage rate. The API returns the billing duration, average daily usage, annualised usage, and estimated annual supply, usage, and combined costs.
+- Fresh Django project and `bills` app
+- Environment-based development settings
+- Minimal landing response with the product caveat
+- Pytest smoke test
+- Product scope, trade-off log, and interview notebook
 
-The calculation engine is kept separate from Django so the core logic can be reused independently. Calculations use Python's `Decimal` for monetary and rate values, and the API validates dates and non-negative numeric inputs.
+Calculation logic, database models, REST endpoints, AER ingestion, PostgreSQL, Docker and CI intentionally come later in the four-week plan.
 
-## API
+## Version 1 scope
 
-The endpoint accepts a JSON `POST` at `/api/bills/analyse/`.
+- Victoria-only electricity bill explanation
+- Manual entry of bill figures
+- Single-rate tariffs
+- Decimal-based annualised calculations
+- Deterministic warnings and explanations
+- AER Product Reference Data ingestion with limited normalisation
+- Simple Django templates and REST endpoints
 
-```bash
-curl -X POST http://127.0.0.1:8000/api/bills/analyse/ \
-  -H "Content-Type: application/json" \
-  -d '{
-    "period_start": "2025-01-01",
-    "period_end": "2025-01-30",
-    "total_kwh": "300.000",
-    "daily_supply_charge": "1.0500",
-    "usage_rate_per_kwh": "0.295000"
-  }'
-```
+## Non-goals
 
-A successful response contains:
+- Replacing an official comparison service
+- Guaranteeing a future bill or cheapest plan
+- Bill PDF upload or OCR
+- Complete time-of-use, controlled-load, demand, gas or solar modelling
+- A separate frontend framework
+- AI-generated recommendations
 
-```json
-{
-  "billing_days": 30,
-  "daily_usage_kwh": "10",
-  "annual_usage_kwh": "3650",
-  "annual_supply_cost": "383.2500",
-  "annual_usage_cost": "1076.750000",
-  "estimated_annual_cost": "1460.000000"
-}
-```
+## Local setup
 
-The estimate annualises the bill's average daily usage over 365 days and applies the submitted single-rate tariff. It is a useful explanation of the supplied inputs, not a comparison with available retail plans.
-
-## Run locally
-
-Requires Python 3.11 or newer.
+Python 3.12 or newer is required.
 
 ```bash
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements-dev.txt
+python -m pip install --upgrade pip
+python -m pip install -e '.[dev]'
+cp .env.example .env
+python manage.py migrate
 python manage.py runserver
 ```
 
-The API is then available at `http://127.0.0.1:8000/api/bills/analyse/`.
-
-## Scope and limitations
-
-- Victorian residential electricity bills
-- Manual bill data entry
-- Single-rate usage tariff and daily supply charge
-- Simplified 365-day annualisation
-
-This version does not include OCR, gas, time-of-use or demand tariffs, detailed solar modelling, or official retailer-plan recommendations. It is an educational portfolio project, not financial advice or an official energy comparison service; actual bills can differ due to tariff structures, discounts, concessions, solar credits, and other charges.
-
-## Development
-
-Install the development dependencies with `python -m pip install -r requirements-dev.txt`. Run the test suite with:
+Run quality checks:
 
 ```bash
-PYTHONPATH=src pytest
+pytest
+python manage.py check
+ruff check .
 ```
+
+## Repository layout
+
+```text
+apps/bills/           Django bill domain app
+config/               Project settings and root URL configuration
+docs/interview_notes.md
+docs/tradeoffs.md
+tests/                Cross-layer tests
+```
+
+## Product caveat
+
+This educational demonstration produces simplified estimates that may not match actual bills. Users should verify results with Victorian Energy Compare, Energy Made Easy, retailer documents and official government guidance.
+
